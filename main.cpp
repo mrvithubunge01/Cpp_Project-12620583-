@@ -72,8 +72,8 @@ int main()
 
     do
     {
-        cout << "\n===== SCHOOL SCIENCE FAIR PROJECT EVALUATOR =====\n";
-        cout << "1. Add Science Project\n";
+        cout << "\n Project Evaluator for Simple Projects \n";
+        cout << "1. Add Projects\n";
         cout << "2. View All Projects\n";
         cout << "3. View Total Projects\n";
         cout << "4. Exit\n";
