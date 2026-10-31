@@ -3,8 +3,7 @@
 #include <string>
 using namespace std;
 
-class ScienceProject
-{
+class ScienceProject {
 private:
     int projectID;
     string projectTitle;
@@ -15,171 +14,180 @@ private:
     static int totalProjects;
 
 public:
-    // Function to enter project details
-    void setDetails(int id, string title, string name,
-                    string cls, string category)
-    {
-        this->projectID = id;
-        this->projectTitle = title;
-        this->studentName = name;
-        this->studentClass = cls;
-        this->scienceCategory = category;
+
+    // Default constructor
+    ScienceProject() {
+        projectID = 0;
+        projectTitle = "";
+        studentName = "";
+        studentClass = "";
+        scienceCategory = "";
     }
 
-    // Function to get project ID
-    int getID()
-    {
-        return projectID;
-    }
+    // Using this pointer
+    void setDetails(int projectID, string projectTitle,
+                    string studentName, string studentClass,
+                    string scienceCategory) {
 
-    // Static function to count projects
-    static void increaseCount()
-    {
+        this->projectID = projectID;
+        this->projectTitle = projectTitle;
+        this->studentName = studentName;
+        this->studentClass = studentClass;
+        this->scienceCategory = scienceCategory;
+
         totalProjects++;
     }
 
-    static int getTotal()
-    {
-        return totalProjects;
+    // Inline function
+    inline int getProjectID() {
+        return projectID;
     }
 
     // Friend function
     friend void displayProject(ScienceProject p);
+
+    // Static function
+    static void showTotalProjects() {
+        cout << "\nTotal Projects: " << totalProjects << endl;
+    }
 };
 
 // Initialize static variable
 int ScienceProject::totalProjects = 0;
 
-// Display project details
-void displayProject(ScienceProject p)
-{
-    cout << "\nProject ID: " << p.projectID << endl;
-    cout << "Project Title: " << p.projectTitle << endl;
-    cout << "Student Name: " << p.studentName << endl;
-    cout << "Student Class: " << p.studentClass << endl;
-    cout << "Science Category: " << p.scienceCategory << endl;
+// Friend function to display project details
+void displayProject(ScienceProject p) {
+
+    cout<<endl;
+    cout <<endl<< "Project ID       : " << p.projectID;
+    cout <<endl<< "Project Title    : " << p.projectTitle;
+    cout <<endl<< "Student Name     : " << p.studentName;
+    cout <<endl<< "Student Class    : " << p.studentClass;
+    cout <<endl<< "Science Category : " << p.scienceCategory;
+    cout<<endl;
 }
 
-// Main function
-int main()
-{
-    ScienceProject projects[100];
+int main() {
+
+    ScienceProject projects[5];
+
+    ScienceProject *ptr;
 
     int count = 0;
     int choice;
-    int id;
-    bool duplicate;
 
-    do
-    {
-        cout << "\n Project Evaluator for Simple Projects \n";
-        cout << "1. Add Projects\n";
-        cout << "2. View All Projects\n";
-        cout << "3. View Total Projects\n";
-        cout << "4. Exit\n";
-        cout << "Enter your choice: ";
+    do {
 
-        if (!(cin >> choice))
-        {
-            cout << "Invalid input. Please restart the program and enter a number.\n";
-            return 0;
+        cout << endl;
+        cout << "SCHOOL SCIENCE FAIR PROJECTS EVALUATOR";
+        cout << endl;
+
+        cout <<endl<< "1. Add New Project";
+        cout <<endl<< "2. View All Projects";
+        cout <<endl<< "3. View Total Projects";
+        cout <<endl<< "4. Exit";
+
+        cout <<endl<< "Enter your choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+
+            if (count >= 5) {
+                cout <<endl<< "Maximum project limit reached!"<<endl;
+                continue;
+            }
+
+            int id;
+            string title, name, studentClass, category;
+
+            cout << "Enter Project ID: ";
+            cin >> id;
+
+            // Check positive ID
+            if (id <= 0) {
+                cout <<endl<< "Invalid Project ID!";
+                continue;
+            }
+
+            // Check duplicate ID
+            bool duplicate = false;
+
+            for (int i = 0; i < count; i++) {
+                if (projects[i].getProjectID() == id) {
+                    duplicate = true;
+                    break;
+                }
+            }
+
+            if (duplicate) {
+                cout <<endl<< "Project ID already exists!";
+                continue;
+            }
+
+            cin.ignore();
+
+            cout << "Enter Project Title: ";
+            getline(cin, title);
+
+            cout << "Enter Student Name: ";
+            getline(cin, name);
+
+            cout << "Enter Student Class: ";
+            getline(cin, studentClass);
+
+            cout << "Enter Category : ";
+            getline(cin, category);
+
+            // Empty field validation
+            if (title.empty() || name.empty() ||
+                studentClass.empty() || category.empty()) {
+
+                cout <<endl<< "All fields are required!";
+                continue;
+            }
+
+            projects[count].setDetails(
+                id, title, name, studentClass, category
+            );
+
+            count++;
+
+            cout <<endl<< "Project Added Successfully!"<<endl;
+
         }
 
-        switch (choice)
-        {
-            case 1:
-                if (count >= 100)
-                {
-                    cout << "Project storage is full!\n";
-                    break;
+        else if (choice == 2) {
+
+            if (count == 0) {
+                cout <<endl<< "No Projects Available!";
+            }
+            else {
+
+                for (int i = 0; i < count; i++) {
+
+                    ptr = &projects[i];
+
+                    displayProject(*ptr);
                 }
+            }
+        }
 
-                cout << "Enter Project ID: ";
+        else if (choice == 3) {
 
-                if (!(cin >> id) || id <= 0)
-                {
-                    cout << "Invalid ID! Enter a positive number.\n";
-                    return 0;
-                }
+            ScienceProject::showTotalProjects();
 
-                duplicate = false;
+        }
 
-                for (int i = 0; i < count; i++)
-                {
-                    if (projects[i].getID() == id)
-                    {
-                        duplicate = true;
-                        break;
-                    }
-                }
+        else if (choice == 4) {
 
-                if (duplicate)
-                {
-                    cout << "Project ID already exists!\n";
-                    break;
-                }
+            cout <<endl<< "Thank You! Exiting Program.";
 
-                cin.ignore(1000, '\n');
+        }
 
-                {
-                    string title, name, cls, category;
+        else {
 
-                    cout << "Enter Project Title: ";
-                    getline(cin, title);
+            cout <<endl<< "Invalid Choice! Try Again.";
 
-                    cout << "Enter Student Name: ";
-                    getline(cin, name);
-
-                    cout << "Enter Student Class: ";
-                    getline(cin, cls);
-
-                    cout << "Enter Science Category: ";
-                    getline(cin, category);
-
-                    if (title.empty() || name.empty() ||
-                        cls.empty() || category.empty())
-                    {
-                        cout << "Fields cannot be empty. Project not saved.\n";
-                        break;
-                    }
-
-                    projects[count].setDetails(
-                        id, title, name, cls, category
-                    );
-
-                    count++;
-                    ScienceProject::increaseCount();
-
-                    cout << "Project added successfully!\n";
-                }
-                break;
-
-            case 2:
-                if (count == 0)
-                {
-                    cout << "No projects available.\n";
-                }
-                else
-                {
-                    for (int i = 0; i < count; i++)
-                    {
-                        ScienceProject* ptr = &projects[i];
-                        displayProject(*ptr);
-                    }
-                }
-                break;
-
-            case 3:
-                cout << "Total Projects: "
-                     << ScienceProject::getTotal() << endl;
-                break;
-
-            case 4:
-                cout << "Thank you! Exiting program.\n";
-                break;
-
-            default:
-                cout << "Invalid choice! Enter 1 to 4.\n";
         }
 
     } while (choice != 4);
