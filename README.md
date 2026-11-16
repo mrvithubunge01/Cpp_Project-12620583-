@@ -1,4 +1,3 @@
-
 # School Science Fair Project Evaluator
 
 A beginner-friendly C++ console project to manage school science fair project records.
